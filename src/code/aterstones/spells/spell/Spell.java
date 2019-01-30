@@ -33,7 +33,16 @@ public abstract class Spell {
         this.range = range;
         this.modifier = modifier;
 
+        runStart();
         runTicker();
+    }
+
+    private void runStart() {
+        try {
+            onStart();
+        } catch (Exception e) {
+            throw new RuntimeException("Error in spell onStart execution: " + e.getMessage(), e);
+        }
     }
 
     private void runTicker() {
@@ -46,13 +55,13 @@ public abstract class Spell {
                         try {
                             onCycle(currentTicks);
                         } catch (Exception e) {
-                            cancel();
-                            throw new RuntimeException("Error in spell execution: " + e.getMessage(), e);
+                            cancelSpell();
+                            throw new RuntimeException("Error in spell onCycle execution: " + e.getMessage(), e);
                         }
                     }
                 }
                 else {
-                    cancel();
+                    cancelSpell();
                 }
                 currentTicks++;
             }
@@ -61,9 +70,17 @@ public abstract class Spell {
     }
 
     public abstract void onCycle(int currentTicks);
+    public abstract void onStart();
+    public abstract void onEnd();
 
-    public void cancel() {
+    public void cancelSpell() {
         runnable.cancel();
+
+        try {
+            onEnd();
+        } catch (Exception e) {
+            throw new RuntimeException("Error in spell onEnd execution: " + e.getMessage(), e);
+        }
     }
 
     public List<Player> collectPlayersInRangeExceptCaster() {
