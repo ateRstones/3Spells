@@ -50,10 +50,18 @@ public abstract class Spell {
         runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                if(ticks > currentTicks) {
+                currentTicks++;
+                if(ticks >= currentTicks) {
+                    try {
+                        onTick(currentTicks);
+                    } catch (Exception e) {
+                        cancelSpell();
+                        throw new RuntimeException("Error in spell onTick execution: " + e.getMessage(), e);
+                    }
+
                     if(currentTicks % cycleLength == 0) {
                         try {
-                            onCycle(currentTicks);
+                            onCycle(currentTicks / cycleLength);
                         } catch (Exception e) {
                             cancelSpell();
                             throw new RuntimeException("Error in spell onCycle execution: " + e.getMessage(), e);
@@ -63,13 +71,13 @@ public abstract class Spell {
                 else {
                     cancelSpell();
                 }
-                currentTicks++;
             }
         };
         runnable.runTaskTimer(ThreeSpells.getInstance(), 0, 1);
     }
 
-    public abstract void onCycle(int currentTicks);
+    public abstract void onTick(int currentTicks);
+    public abstract void onCycle(int cycle);
     public abstract void onStart();
     public abstract void onEnd();
 

@@ -1,4 +1,4 @@
-package code.aterstones.spells;
+package code.aterstones.spells.spell.listener;
 
 import org.bukkit.event.Listener;
 
