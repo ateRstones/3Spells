@@ -20,7 +20,9 @@ public class SpellListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         if(lockedPlayers.contains(event.getPlayer().getUniqueId())) {
-            event.setCancelled(true);
+            if(event.getFrom().distanceSquared(event.getTo()) > 0) {
+                event.setCancelled(true);
+            }
         }
     }
 

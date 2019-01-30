@@ -1,6 +1,7 @@
 package code.aterstones.spells;
 
 import code.aterstones.spells.command.SpellCommand;
+import code.aterstones.spells.spell.FireNova;
 import code.aterstones.spells.spell.HealingTotem;
 import code.aterstones.spells.spell.Spell;
 import code.aterstones.spells.spell.Spread;
@@ -41,6 +42,7 @@ public class ThreeSpells extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(spellListener, this);
 
         //Registering Spells
+        addSpell(p -> new FireNova(p));
         addSpell(p -> new Spread(p));
         addSpell(p -> new HealingTotem(p));
     }

@@ -112,7 +112,7 @@ public abstract class Spell {
     public boolean isInRange(Player p) {
         Location loc = p.getLocation();
         return loc.getWorld() == location.getWorld() &&
-                loc.toVector().distanceSquared(location.toVector()) <= range * range;
+                loc.distanceSquared(location) <= range * range;
     }
 
     public Location getLocation() {
