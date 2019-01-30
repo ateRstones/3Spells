@@ -3,6 +3,7 @@ package code.aterstones.spells;
 import code.aterstones.spells.command.SpellCommand;
 import code.aterstones.spells.spell.HealingTotem;
 import code.aterstones.spells.spell.Spell;
+import code.aterstones.spells.spell.Spread;
 import code.aterstones.spells.spell.listener.SpellListener;
 import code.aterstones.spells.util.CommandRegisterer;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ public class ThreeSpells extends JavaPlugin {
 
     private static ThreeSpells instance;
 
+    private SpellListener spellListener;
     private HashMap<Integer, Function<Player, Spell>> spellMap = new HashMap<>();
     private int id = 1;
 
@@ -31,10 +33,15 @@ public class ThreeSpells extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        CommandRegisterer.registerCommand(this, "spells", "Executes the spells 1 to 3", new SpellCommand());
-        Bukkit.getPluginManager().registerEvents(new SpellListener(), this);
+        //Registering Commands
+        CommandRegisterer.registerCommand(this, "spell", "Executes the spells 1 to 3", new SpellCommand());
+
+        //Registering Listeners
+        spellListener = new SpellListener();
+        Bukkit.getPluginManager().registerEvents(spellListener, this);
 
         //Registering Spells
+        addSpell(p -> new Spread(p));
         addSpell(p -> new HealingTotem(p));
     }
 
@@ -56,6 +63,10 @@ public class ThreeSpells extends JavaPlugin {
         } else {
             return false;
         }
+    }
+
+    public SpellListener getSpellListener() {
+        return spellListener;
     }
 
     public static ThreeSpells getInstance() {

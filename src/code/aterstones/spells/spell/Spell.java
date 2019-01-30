@@ -81,6 +81,14 @@ public abstract class Spell {
     public abstract void onStart();
     public abstract void onEnd();
 
+    public void lockCaster() {
+        ThreeSpells.getInstance().getSpellListener().addLockedPlayer(player);
+    }
+
+    public void unlockCaster() {
+        ThreeSpells.getInstance().getSpellListener().removeLockedPlayer(player);
+    }
+
     public void cancelSpell() {
         runnable.cancel();
 

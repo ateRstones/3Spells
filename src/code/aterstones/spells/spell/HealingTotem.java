@@ -49,6 +49,11 @@ public class HealingTotem extends Spell {
             double z = getRange() * Math.cos(rad);
             Location l = getLocation();
             int blockY = l.getWorld().getHighestBlockYAt((int) (x + l.getX()), (int) (z + l.getZ()));
+
+            if(Math.abs(l.getY() - blockY) > 4) {
+                blockY = l.getBlockY();
+            }
+
             l.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, x + l.getX(), blockY, z + l.getZ(), 1);
         }
     }
